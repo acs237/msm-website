@@ -9,6 +9,13 @@ class SecurityConfiguration
     app.set :session_secret, session_secret
     app.enable :sessions
     app.set :sessions, session_options
+
+    # Every other Rack::Protection middleware stays on. session_hijacking is
+    # dropped because it compares only the User-Agent, which an attacker who
+    # has the cookie also has — while a routine browser update changes it and
+    # silently empties the session of every logged-in user, with no error to
+    # explain the logout. The cost is real and the protection is not.
+    app.set :protection, except: :session_hijacking
   end
 
   def session_secret
