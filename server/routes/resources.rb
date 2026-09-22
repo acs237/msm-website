@@ -4,6 +4,8 @@ module Routes
   module Resources
     def self.registered(app)
       app.get "/api/resources" do
+        require_login!
+
         begin
           groups = ResourceProxy.list_groups
           # `items` is the flattened view, kept so a client that ignores
@@ -16,6 +18,8 @@ module Routes
       end
 
       app.get "/api/resources/download/:file_id" do
+        require_login!
+
         begin
           resource = ResourceProxy.fetch(params[:file_id])
         rescue StandardError => error
@@ -27,7 +31,10 @@ module Routes
 
         content_type resource[:content_type]
         headers["Content-Disposition"] = %(attachment; filename="#{resource[:filename]}")
-        headers["Cache-Control"] = "public, max-age=3600"
+        # `private`, not `public`: this body is only for the logged-in user who
+        # asked for it, and `public` invites shared caches (CDNs, corporate
+        # proxies) to store it and hand it to someone who never logged in.
+        headers["Cache-Control"] = "private, max-age=3600"
         resource[:body]
       end
     end

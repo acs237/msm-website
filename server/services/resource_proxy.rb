@@ -52,7 +52,7 @@ class ResourceProxy
 
     drive_files(
       q: "(#{parents}) and trashed = false and mimeType != '#{FOLDER_MIME}'",
-      fields: "nextPageToken,files(id,name,mimeType,size,modifiedTime,webViewLink,parents)",
+      fields: "nextPageToken,files(id,name,mimeType,size,modifiedTime,parents)",
     ).map do |file|
       {
         id: file["id"],
@@ -60,7 +60,8 @@ class ResourceProxy
         mimeType: file["mimeType"],
         size: file["size"].to_i,
         modifiedTime: file["modifiedTime"],
-        webViewLink: file["webViewLink"],
+        # No webViewLink: a drive.google.com URL in the response is a way round
+        # this server's login check, which is the thing guarding these files.
         parentId: Array(file["parents"]).first,
       }
     end

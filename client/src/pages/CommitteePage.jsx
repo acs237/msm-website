@@ -7,10 +7,12 @@ import SectionHeader from '../components/SectionHeader'
 import ImagePlaceholder from '../components/ImagePlaceholder'
 import { accentOf } from '../accents'
 import { fill, useContent } from '../i18n'
+import { useAuth } from '../auth'
 
 /** Drives both /momc and /motc from the same content shape. */
 export default function CommitteePage({ slug }) {
   const { committees, committeePage, ui } = useContent()
+  const { user, status: authStatus } = useAuth()
   const committee = committees.find((c) => c.slug === slug)
   const [resourceGroups, setResourceGroups] = useState([])
   const [resourcesLoading, setResourcesLoading] = useState(Boolean(committee?.page?.resources?.dynamic))
@@ -18,7 +20,7 @@ export default function CommitteePage({ slug }) {
   const dynamicResources = Boolean(committee?.page?.resources?.dynamic)
 
   useEffect(() => {
-    if (!dynamicResources) return
+    if (!dynamicResources || !user) return
 
     let cancelled = false
 
@@ -49,7 +51,7 @@ export default function CommitteePage({ slug }) {
     return () => {
       cancelled = true
     }
-  }, [dynamicResources])
+  }, [dynamicResources, user])
 
   if (!committee) return <Navigate to="/" replace />
 
@@ -169,6 +171,22 @@ export default function CommitteePage({ slug }) {
       {page.resources && (
         <section className="border-b border-msm-line bg-white py-16 sm:py-24">
           <Container>
+            {/* Both the listing and the downloads are gated server-side; this
+                only keeps the page consistent with what the API will allow. */}
+            {authStatus !== 'ready' ? null : !user ? (
+              <div>
+                <h2 className="display text-[clamp(2rem,5vw,3.5rem)] text-msm-ink">
+                  {page.resources.title}
+                </h2>
+                <p className="mt-6 text-msm-slate">{committeePage.resourcesLocked}</p>
+                <Link
+                  to="/login"
+                  className="mt-6 inline-block border-2 border-msm-ink px-6 py-3 font-cond text-sm font-semibold uppercase tracking-[0.14em] text-msm-ink transition-colors hover:bg-msm-ink hover:text-white"
+                >
+                  {committeePage.resourcesLoginCta}
+                </Link>
+              </div>
+            ) : (
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 [&::-webkit-details-marker]:hidden">
                 <h2 className="display text-[clamp(2rem,5vw,3.5rem)] text-msm-ink">
@@ -295,6 +313,7 @@ export default function CommitteePage({ slug }) {
                 )}
               </div>
             </details>
+            )}
           </Container>
         </section>
       )}
