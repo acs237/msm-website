@@ -40,18 +40,32 @@ services:
       # CLIENT_ORIGIN is deliberately unset: under the Vercel proxy there are
       # no cross-origin requests, so the CORS headers never come into play.
 
-      # Secrets — set these in the Render dashboard, never in this file.
-      - key: SMTP_ADDRESS
+      # Mail is sent through Resend's HTTP API, not SMTP: Render blocks outbound
+      # SMTP ports (25/465/587), so Net::SMTP fails there with Net::OpenTimeout.
+      # Set both in the Render dashboard, never in this file.
+      - key: RESEND_API_KEY
         sync: false
-      - key: SMTP_PORT
+      - key: MAIL_FROM
         sync: false
-      - key: SMTP_DOMAIN
+
+      # Google Drive backs GET /api/resources and the download route. Both are
+      # required: ResourceProxy raises on a missing/blank value, the route
+      # rescues it, and the browser sees a bare 502 — the real reason appears
+      # only in the Render log as "Resource list failed (RuntimeError): ...".
+      #
+      # Point this at the PARENT folder: its subfolders become the groups on
+      # the page, one level down only (Drive has no recursive query). A folder
+      # with no subfolders still works and renders as a single ungrouped list.
+      #
+      # The folder must be shared with the service account's client_email
+      # (Viewer is enough); sharing with your own account does nothing.
+      # Sharing the parent cascades, so new subfolders need no config change.
+      - key: GOOGLE_DRIVE_RESOURCES_FOLDER_ID
         sync: false
-      - key: SMTP_USERNAME
-        sync: false
-      - key: SMTP_PASSWORD
-        sync: false
-      - key: SMTP_FROM
-        sync: false
-      - key: SMTP_STARTTLS
+
+      # The whole service-account JSON key, pasted as ONE line. Render stores
+      # it verbatim, so a value broken across lines fails JSON.parse and reads
+      # as the same 502. GOOGLE_SERVICE_ACCOUNT_KEY_PATH is the local-only
+      # alternative — there is no key file on Render to point it at.
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
         sync: false

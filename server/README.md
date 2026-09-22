@@ -3,9 +3,15 @@
 
 The API is a small Sinatra service backed by PostgreSQL. It exposes
 `GET /health`, `POST /api/signup`, and same-origin resource downloads at
-`GET /api/resources/:slug`. Resource origins stay in the server's resource
-registry; the download route returns the upstream file bytes and never
-redirects the browser to the storage provider.
+`GET /api/resources/download/:file_id`. The download route returns the upstream
+file bytes and never redirects the browser to the storage provider.
+
+`GET /api/resources` returns `{groups, items}`. `GOOGLE_DRIVE_RESOURCES_FOLDER_ID`
+names a *parent* folder: each of its subfolders becomes a group, keyed by the
+subfolder's own Drive name, and files sitting loose in the parent form a final
+untitled group. The descent is one level only — Drive's query language has no
+recursive form — and a folder with no subfolders yields a single untitled group,
+so a flat folder behaves as it did before. `items` is the same files flattened.
 
 For file downloads, configure a Google service account and point
 `GOOGLE_SERVICE_ACCOUNT_JSON` or `GOOGLE_SERVICE_ACCOUNT_KEY_PATH` at the

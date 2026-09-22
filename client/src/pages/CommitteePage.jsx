@@ -12,16 +12,10 @@ import { fill, useContent } from '../i18n'
 export default function CommitteePage({ slug }) {
   const { committees, committeePage, ui } = useContent()
   const committee = committees.find((c) => c.slug === slug)
-  const [resources, setResources] = useState([])
+  const [resourceGroups, setResourceGroups] = useState([])
   const [resourcesLoading, setResourcesLoading] = useState(Boolean(committee?.page?.resources?.dynamic))
-
-  if (!committee) return <Navigate to="/" replace />
-
-  const a = accentOf(committee.accent)
-  const other = committees.find((c) => c.slug !== slug)
-  const { page } = committee
-  const vars = { acronym: committee.acronym }
-  const dynamicResources = Boolean(page.resources?.dynamic)
+  const [resourcesFailed, setResourcesFailed] = useState(false)
+  const dynamicResources = Boolean(committee?.page?.resources?.dynamic)
 
   useEffect(() => {
     if (!dynamicResources) return
@@ -36,10 +30,16 @@ export default function CommitteePage({ slug }) {
 
         const payload = await response.json()
         if (!cancelled) {
-          setResources(Array.isArray(payload.items) ? payload.items : [])
+          setResourceGroups(Array.isArray(payload.groups) ? payload.groups : [])
+          setResourcesFailed(false)
         }
-      } catch (error) {
-        if (!cancelled) setResources([])
+      } catch {
+        // Say so rather than rendering an empty list: a misconfigured Drive
+        // folder used to look identical to a folder with nothing in it.
+        if (!cancelled) {
+          setResourceGroups([])
+          setResourcesFailed(true)
+        }
       } finally {
         if (!cancelled) setResourcesLoading(false)
       }
@@ -51,6 +51,13 @@ export default function CommitteePage({ slug }) {
     }
   }, [dynamicResources])
 
+  if (!committee) return <Navigate to="/" replace />
+
+  const a = accentOf(committee.accent)
+  const other = committees.find((c) => c.slug !== slug)
+  const { page } = committee
+  const vars = { acronym: committee.acronym }
+
   const formatResourceMeta = (item) => {
     const type = item.mimeType?.includes('pdf') ? 'PDF' : (item.mimeType || 'FILE').split('/').pop()?.toUpperCase() || 'FILE'
     const size = Number(item.size || 0)
@@ -61,13 +68,18 @@ export default function CommitteePage({ slug }) {
     return `${type} · ${size} B`
   }
 
-  const resourceItems = dynamicResources
-    ? resources.map((item) => ({
-        name: item.name,
-        href: `/api/resources/download/${item.id}`,
-        meta: formatResourceMeta(item),
+  // Both branches produce the same {title, items} shape, so the two resource
+  // renderers stay in step: Drive subfolder names become the group headings.
+  const groups = dynamicResources
+    ? resourceGroups.map((group) => ({
+        title: group.name,
+        items: group.items.map((item) => ({
+          name: item.name,
+          href: `/api/resources/download/${item.id}`,
+          meta: formatResourceMeta(item),
+        })),
       }))
-    : page.resources?.groups?.flatMap((group) => group.items) ?? []
+    : page.resources?.groups ?? []
 
   // A committee opts out of either half of the side column by omitting its key.
   const hasPhoto = Boolean(page.imageCaption)
@@ -171,31 +183,42 @@ export default function CommitteePage({ slug }) {
               </summary>
               <div className="mt-10 space-y-14">
                 {dynamicResources ? (
-                  <div>
-                    {resourcesLoading ? (
-                      <p className="text-sm text-msm-slate">Loading resources…</p>
-                    ) : (
-                      <ul className="mt-5 border-t border-msm-line">
-                        {resourceItems.map((item) => (
-                          <li key={item.name} className="border-b border-msm-line">
-                            <a
-                              href={item.href}
-                              className="group flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4 transition-colors hover:text-msm-blue-600"
-                            >
-                              <span className="text-msm-ink underline-offset-4 group-hover:text-msm-blue-600 group-hover:underline">
-                                {item.name}
-                              </span>
-                              <span className="shrink-0 font-cond text-xs font-semibold uppercase tracking-[0.14em] text-msm-slate">
-                                {item.meta}
-                              </span>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+                  resourcesLoading ? (
+                    <p className="text-sm text-msm-slate">Loading resources…</p>
+                  ) : resourcesFailed ? (
+                    <p className="text-sm text-msm-slate">
+                      Resources are unavailable right now. Please try again later.
+                    </p>
+                  ) : groups.length === 0 ? (
+                    <p className="text-sm text-msm-slate">No resources have been published yet.</p>
+                  ) : (
+                    groups.map((group, index) => (
+                      <div key={group.title ?? `group-${index}`}>
+                        {group.title && (
+                          <h3 className="display-sm text-2xl text-msm-ink">{group.title}</h3>
+                        )}
+                        <ul className="mt-5 border-t border-msm-line">
+                          {group.items.map((item) => (
+                            <li key={item.href} className="border-b border-msm-line">
+                              <a
+                                href={item.href}
+                                className="group flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4 transition-colors hover:text-msm-blue-600"
+                              >
+                                <span className="text-msm-ink underline-offset-4 group-hover:text-msm-blue-600 group-hover:underline">
+                                  {item.name}
+                                </span>
+                                <span className="shrink-0 font-cond text-xs font-semibold uppercase tracking-[0.14em] text-msm-slate">
+                                  {item.meta}
+                                </span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))
+                  )
                 ) : (
-                  page.resources.groups.map((group) => (
+                  groups.map((group) => (
                     <div key={group.title}>
                       <div className="flex flex-wrap items-baseline justify-between gap-4">
                         <h3 className="display-sm text-2xl text-msm-ink">{group.title}</h3>

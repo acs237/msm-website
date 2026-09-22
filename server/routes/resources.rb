@@ -5,7 +5,10 @@ module Routes
     def self.registered(app)
       app.get "/api/resources" do
         begin
-          json_response({ items: ResourceProxy.list_files })
+          groups = ResourceProxy.list_groups
+          # `items` is the flattened view, kept so a client that ignores
+          # grouping keeps working.
+          json_response({ groups: groups, items: groups.flat_map { |group| group[:items] } })
         rescue StandardError => error
           warn "Resource list failed (#{error.class}): #{error.message}"
           json_response({ error: "resource_unavailable", message: "Unable to load resources right now" }, 502)
