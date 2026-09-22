@@ -70,9 +70,10 @@ export default function CommitteePage({ slug }) {
     return `${type} · ${size} B`
   }
 
-  // Both branches produce the same {title, items} shape, so the two resource
-  // renderers stay in step: Drive subfolder names become the group headings.
-  const groups = dynamicResources
+  // Everything in this section renders through one path, so Drive files and
+  // the hardcoded playlists stay visually consistent. `external` marks the
+  // groups whose links leave the site; a Drive item is a same-origin download.
+  const fileGroups = dynamicResources
     ? resourceGroups.map((group) => ({
         title: group.name,
         items: group.items.map((item) => ({
@@ -81,7 +82,15 @@ export default function CommitteePage({ slug }) {
           meta: formatResourceMeta(item),
         })),
       }))
-    : page.resources?.groups ?? []
+    : (page.resources?.groups ?? []).map((group) => ({ ...group, external: true }))
+
+  // Still read from the content bundle, not from Drive — but shown inside the
+  // gated section, so they are visible only once logged in.
+  const videoGroups = page.videos?.length
+    ? [{ title: committeePage.videosHeading, external: true, items: page.videos }]
+    : []
+
+  const groups = [...fileGroups, ...videoGroups]
 
   // A committee opts out of either half of the side column by omitting its key.
   const hasPhoto = Boolean(page.imageCaption)
@@ -200,117 +209,104 @@ export default function CommitteePage({ slug }) {
                 </span>
               </summary>
               <div className="mt-10 space-y-14">
-                {dynamicResources ? (
-                  resourcesLoading ? (
-                    <p className="text-sm text-msm-slate">Loading resources…</p>
-                  ) : resourcesFailed ? (
-                    <p className="text-sm text-msm-slate">
-                      Resources are unavailable right now. Please try again later.
-                    </p>
-                  ) : groups.length === 0 ? (
-                    <p className="text-sm text-msm-slate">No resources have been published yet.</p>
-                  ) : (
-                    groups.map((group, index) => (
-                      <div key={group.title ?? `group-${index}`}>
-                        {group.title && (
-                          <h3 className="display-sm text-2xl text-msm-ink">{group.title}</h3>
-                        )}
-                        <ul className="mt-5 border-t border-msm-line">
-                          {group.items.map((item) => (
-                            <li key={item.href} className="border-b border-msm-line">
-                              <a
-                                href={item.href}
-                                className="group flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4 transition-colors hover:text-msm-blue-600"
-                              >
-                                <span className="text-msm-ink underline-offset-4 group-hover:text-msm-blue-600 group-hover:underline">
-                                  {item.name}
-                                </span>
-                                <span className="shrink-0 font-cond text-xs font-semibold uppercase tracking-[0.14em] text-msm-slate">
-                                  {item.meta}
-                                </span>
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))
-                  )
-                ) : (
-                  groups.map((group) => (
-                    <div key={group.title}>
-                      <div className="flex flex-wrap items-baseline justify-between gap-4">
-                        <h3 className="display-sm text-2xl text-msm-ink">{group.title}</h3>
-                        {group.folder && (
-                          <a
-                            href={group.folder.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-cond text-sm font-semibold uppercase tracking-[0.14em] text-msm-blue-600 underline underline-offset-4 transition-colors hover:text-msm-ink"
-                          >
-                            {group.folder.label} <span aria-hidden="true">↗</span>
-                            <span className="sr-only">{ui.opensInNewTab}</span>
-                          </a>
-                        )}
-                      </div>
-
-                      <ul className="mt-5 border-t border-msm-line">
-                        {group.items.map((item) => (
-                          <li key={item.name} className="border-b border-msm-line">
-                            <a
-                              href={item.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="group flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4 transition-colors hover:text-msm-blue-600"
-                            >
-                              <span className="text-msm-ink underline-offset-4 group-hover:text-msm-blue-600 group-hover:underline">
-                                {item.name}
-                              </span>
-                              <span className="shrink-0 font-cond text-xs font-semibold uppercase tracking-[0.14em] text-msm-slate">
-                                {item.meta} <span aria-hidden="true">↗</span>
-                                <span className="sr-only">{ui.opensInNewTab}</span>
-                              </span>
-                            </a>
-
-                            {item.videos && (
-                              <details className="group/d pb-4">
-                                <summary className="flex cursor-pointer list-none items-center gap-2 font-cond text-xs font-semibold uppercase tracking-[0.14em] text-msm-blue-600 [&::-webkit-details-marker]:hidden">
-                                  <span
-                                    aria-hidden="true"
-                                    className="inline-block transition-transform group-open/d:rotate-90"
-                                  >
-                                    ▸
-                                  </span>
-                                  {item.videos.length === 1
-                                    ? committeePage.showVideosOne
-                                    : fill(committeePage.showVideos, { count: item.videos.length })}
-                                </summary>
-
-                                <ol className="mt-3 space-y-px border-l-2 border-msm-line pl-4">
-                                  {item.videos.map((video) => (
-                                    <li key={video.href}>
-                                      <a
-                                        href={video.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-1.5 text-sm text-msm-slate underline-offset-4 transition-colors hover:text-msm-blue-600 hover:underline"
-                                      >
-                                        <span>{video.name}</span>
-                                        <span className="shrink-0 font-cond text-xs tracking-[0.1em] text-msm-slate/70">
-                                          {video.meta}
-                                          <span className="sr-only">{ui.opensInNewTab}</span>
-                                        </span>
-                                      </a>
-                                    </li>
-                                  ))}
-                                </ol>
-                              </details>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))
+                {/* Only the Drive half can be loading or unavailable; the
+                    playlists come from the content bundle, so they still show
+                    when Drive is down. */}
+                {dynamicResources && resourcesLoading && (
+                  <p className="text-sm text-msm-slate">Loading resources…</p>
                 )}
+                {dynamicResources && !resourcesLoading && resourcesFailed && (
+                  <p className="text-sm text-msm-slate">
+                    Resources are unavailable right now. Please try again later.
+                  </p>
+                )}
+                {dynamicResources && !resourcesLoading && !resourcesFailed && fileGroups.length === 0 && (
+                  <p className="text-sm text-msm-slate">No files have been published yet.</p>
+                )}
+
+                {groups.map((group, index) => (
+                  <div key={group.title ?? `group-${index}`}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-4">
+                      {group.title && (
+                        <h3 className="display-sm text-2xl text-msm-ink">{group.title}</h3>
+                      )}
+                      {group.folder && (
+                        <a
+                          href={group.folder.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-cond text-sm font-semibold uppercase tracking-[0.14em] text-msm-blue-600 underline underline-offset-4 transition-colors hover:text-msm-ink"
+                        >
+                          {group.folder.label} <span aria-hidden="true">↗</span>
+                          <span className="sr-only">{ui.opensInNewTab}</span>
+                        </a>
+                      )}
+                    </div>
+
+                    <ul className="mt-5 border-t border-msm-line">
+                      {group.items.map((item) => (
+                        <li key={item.href} className="border-b border-msm-line">
+                          <a
+                            href={item.href}
+                            {...(group.external
+                              ? { target: '_blank', rel: 'noopener noreferrer' }
+                              : {})}
+                            className="group flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4 transition-colors hover:text-msm-blue-600"
+                          >
+                            <span className="text-msm-ink underline-offset-4 group-hover:text-msm-blue-600 group-hover:underline">
+                              {item.name}
+                            </span>
+                            <span className="shrink-0 font-cond text-xs font-semibold uppercase tracking-[0.14em] text-msm-slate">
+                              {item.meta}
+                              {group.external && (
+                                <>
+                                  {' '}
+                                  <span aria-hidden="true">↗</span>
+                                  <span className="sr-only">{ui.opensInNewTab}</span>
+                                </>
+                              )}
+                            </span>
+                          </a>
+
+                          {item.videos && (
+                            <details className="group/d pb-4">
+                              <summary className="flex cursor-pointer list-none items-center gap-2 font-cond text-xs font-semibold uppercase tracking-[0.14em] text-msm-blue-600 [&::-webkit-details-marker]:hidden">
+                                <span
+                                  aria-hidden="true"
+                                  className="inline-block transition-transform group-open/d:rotate-90"
+                                >
+                                  ▸
+                                </span>
+                                {item.videos.length === 1
+                                  ? committeePage.showVideosOne
+                                  : fill(committeePage.showVideos, { count: item.videos.length })}
+                              </summary>
+
+                              <ol className="mt-3 space-y-px border-l-2 border-msm-line pl-4">
+                                {item.videos.map((video) => (
+                                  <li key={video.href}>
+                                    <a
+                                      href={video.href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-1.5 text-sm text-msm-slate underline-offset-4 transition-colors hover:text-msm-blue-600 hover:underline"
+                                    >
+                                      <span>{video.name}</span>
+                                      <span className="shrink-0 font-cond text-xs tracking-[0.1em] text-msm-slate/70">
+                                        {video.meta}
+                                        <span className="sr-only">{ui.opensInNewTab}</span>
+                                      </span>
+                                    </a>
+                                  </li>
+                                ))}
+                              </ol>
+                            </details>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </details>
             )}

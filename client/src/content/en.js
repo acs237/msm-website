@@ -524,6 +524,7 @@ const committeePage = {
   showVideos: 'Show all {count} videos',
   showVideosOne: 'Show the video',
   responsibilitiesHeading: 'What {acronym} does',
+  videosHeading: 'Videos',
   resourcesLocked: 'Log in to get access to resources',
   resourcesLoginCta: 'Log in',
   otherCommittee: 'The other committee',
