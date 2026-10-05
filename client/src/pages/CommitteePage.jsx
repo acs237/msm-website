@@ -104,6 +104,7 @@ export default function CommitteePage({ slug }) {
         title={committee.acronym}
         subtitle={committee.fullName}
         accent={committee.accent}
+        logo={committee.logo}
       />
 
       <section className="border-b border-msm-line bg-white py-16 sm:py-24">

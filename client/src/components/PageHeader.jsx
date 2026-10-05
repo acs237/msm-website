@@ -4,7 +4,7 @@ import { accentOf } from '../accents'
 import { useContent } from '../i18n'
 
 /** Compact dark banner used at the top of every route other than the home page. */
-export default function PageHeader({ eyebrow, title, subtitle, accent = 'blue' }) {
+export default function PageHeader({ eyebrow, title, subtitle, accent = 'blue', logo }) {
   const { ui } = useContent()
   const a = accentOf(accent)
 
@@ -33,15 +33,26 @@ export default function PageHeader({ eyebrow, title, subtitle, accent = 'blue' }
           </ol>
         </nav>
 
-        <span className={`block h-1.5 w-16 ${a.bar}`} aria-hidden="true" />
+        <div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <span className={`block h-1.5 w-16 ${a.bar}`} aria-hidden="true" />
 
-        <h1 className="display mt-6 text-[clamp(2.5rem,8vw,5rem)] text-white">{title}</h1>
+            <h1 className="display mt-6 text-[clamp(2.5rem,8vw,5rem)] text-white">{title}</h1>
 
-        {subtitle && (
-          <p className="mt-4 font-cond text-lg font-medium text-white/70 sm:text-xl">
-            {subtitle}
-          </p>
-        )}
+            {subtitle && (
+              <p className="mt-4 font-cond text-lg font-medium text-white/70 sm:text-xl">
+                {subtitle}
+              </p>
+            )}
+          </div>
+
+          {/* White tile so a logo drawn on white reads as framed on the dark banner. */}
+          {logo && (
+            <div className="w-36 shrink-0 bg-white sm:w-48 lg:w-64">
+              <img src={logo} alt="" aria-hidden="true" className="aspect-square w-full object-contain" />
+            </div>
+          )}
+        </div>
       </Container>
     </section>
   )

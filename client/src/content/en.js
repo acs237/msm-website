@@ -91,6 +91,7 @@ const committees = [
     acronym: 'MOMC',
     fullName: 'Myanmar Open Mathematics Competition', // STUB — confirm exact name
     accent: 'blue',
+    logo: '/MOMC logo.jpg',
     role: 'Competition & selection',
     summary:
       'MOMC designs and oversees the selection pathway for choosing students to represent Myanmar at the International Mathematical Olympiad (IMO). It also curates and selects appropriate problems for each stage of the selection process.',
@@ -134,6 +135,7 @@ const committees = [
     acronym: 'MOTC',
     fullName: 'Mathematical Olympiad Training Committee', // STUB — confirm exact name
     accent: 'green',
+    logo: '/MOTC logo.jpg',
     role: 'Training & instruction',
     summary:
       'MOTC delivers the training program. Led by former IMO contestants alongside university-level mathematics students and researchers, it prepares selected students through intensive training and guides them toward international competitions.',
@@ -144,8 +146,8 @@ const committees = [
       partners: {
         title: 'Principal partners',
         items: [
-          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
           { name: 'T&H Maths Centre', logo: '/exam_centres/T&H Maths Centre.png' },
+          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
           { name: 'CAE', logo: '/exam_centres/CAE.jpeg' },
           { name: 'Bridge International', logo: '/exam_centres/Bridge International.png' },
         ],
