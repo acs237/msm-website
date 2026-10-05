@@ -1,0 +1,23 @@
+# Supabase's free plan pauses a project after a week without database
+# activity, and anonymous visitors never query the database (/api/session
+# returns early without a session cookie). Hitting /health wakes the Render
+# service and runs SELECT 1 against Supabase, which keeps the project active.
+name: Keep Supabase awake
+
+on:
+  schedule:
+    - cron: "0 3 */2 * *" # every other day, 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /health
+        # Render's free instance can take ~1 minute to cold-start, so allow a
+        # long timeout and retry. --fail makes a 503 (database unavailable)
+        # fail the run, which surfaces a paused project in the Actions tab.
+        run: |
+          curl --fail --silent --show-error \
+            --max-time 120 --retry 3 --retry-delay 30 --retry-all-errors \
+            https://msm-api-jw9d.onrender.com/health

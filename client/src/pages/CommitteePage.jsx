@@ -322,28 +322,12 @@ export default function CommitteePage({ slug }) {
               {page.partners.title}
             </h2>
 
-            <ul className="mt-10 grid gap-px border-t border-msm-line bg-msm-line sm:grid-cols-2">
-              {page.partners.items.map((partner) => (
-                <li key={partner.name} className="bg-white px-8 py-12 text-center">
-                  <div className="mx-auto max-w-sm">
-                    {partner.logo ? (
-                      <img
-                        src={partner.logo}
-                        alt={partner.name}
-                        loading="lazy"
-                        className="mx-auto h-28 w-auto max-w-full object-contain"
-                      />
-                    ) : (
-                      <ImagePlaceholder
-                        ratio="aspect-[3/1]"
-                        caption={committeePage.partnerLogoCaption}
-                      />
-                    )}
-                  </div>
-                  <p className="mt-6 display-sm text-xl text-msm-ink">{partner.name}</p>
-                </li>
-              ))}
-            </ul>
+            <CentreGrid
+              items={page.partners.items}
+              stub={committeePage.centreLogoStub}
+              className="mt-10 grid-cols-2 lg:grid-cols-4"
+              logoClassName="h-28 sm:h-36"
+            />
           </Container>
         </section>
       )}
@@ -356,33 +340,12 @@ export default function CommitteePage({ slug }) {
               {page.centres.title}
             </h2>
 
-            {/* Inset rings rather than gap-px, so a ragged last row stays white. */}
-            <ul className="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-              {page.centres.items.map((centre) => (
-                <li
-                  key={centre.name}
-                  className="p-6 text-center shadow-[inset_0_0_0_1px_var(--color-msm-line)]"
-                >
-                  <div className="flex h-20 items-center justify-center">
-                    {centre.logo ? (
-                      <img
-                        src={centre.logo}
-                        alt={centre.name}
-                        loading="lazy"
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    ) : (
-                      <span className="flex h-full w-full items-center justify-center border-2 border-dashed border-msm-line bg-msm-mist font-cond text-[10px] font-semibold uppercase tracking-[0.16em] text-msm-slate">
-                        {committeePage.centreLogoStub}
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-4 font-cond text-sm leading-snug font-semibold text-msm-ink">
-                    {centre.name}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <CentreGrid
+              items={page.centres.items}
+              stub={committeePage.centreLogoStub}
+              className="mt-10 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+              logoClassName="h-20"
+            />
           </Container>
         </section>
       )}
@@ -438,5 +401,39 @@ export default function CommitteePage({ slug }) {
         </Container>
       </section>
     </>
+  )
+}
+
+/** Logo tiles for exam centres. Inset rings rather than gap-px, so a ragged last row stays white. */
+function CentreGrid({ items, stub, className, logoClassName }) {
+  if (items.length === 0) return null
+
+  return (
+    <ul className={`grid ${className}`}>
+      {items.map((centre) => (
+        <li
+          key={centre.name}
+          className="p-6 text-center shadow-[inset_0_0_0_1px_var(--color-msm-line)]"
+        >
+          <div className={`flex items-center justify-center ${logoClassName}`}>
+            {centre.logo ? (
+              <img
+                src={centre.logo}
+                alt={centre.name}
+                loading="lazy"
+                className="max-h-full max-w-full object-contain"
+              />
+            ) : (
+              <span className="flex h-full w-full items-center justify-center border-2 border-dashed border-msm-line bg-msm-mist font-cond text-[10px] font-semibold uppercase tracking-[0.16em] text-msm-slate">
+                {stub}
+              </span>
+            )}
+          </div>
+          <p className="mt-4 font-cond text-sm leading-snug font-semibold text-msm-ink">
+            {centre.name}
+          </p>
+        </li>
+      ))}
+    </ul>
   )
 }

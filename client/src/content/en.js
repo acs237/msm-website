@@ -98,34 +98,36 @@ const committees = [
       body: [
         'MOMC is the astonishing proof-type national Maths Olympiad contest in Myanmar. MOMC (Myanmar Open Mathematics Competition) is the only gateway for the IMO. Divided by the age bracket, MOMC currently host 4 levels - Junior(I&II) and Seniors (I&II). Each level has 2 rounds: Round 1 is open to any student fallen in the relevant age bracket and Round 2 is explicitly for those who are chosen from the Round 1, and they are usually held in Late October and early January respectively.',
       ],
-      /**
-       * STUB — names and logos both. Put the logo files in public/partners/
-       * (transparent PNG or SVG, ~800px on the long edge) and set `logo` to
-       * the path. A null logo renders the placeholder.
-       */
       partners: {
         title: 'Principal partners',
         items: [
-          { name: 'STUB — first principal partner', logo: null },
-          { name: 'STUB — second principal partner', logo: null },
+          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
+          { name: 'T&H Maths Centre', logo: '/exam_centres/T&H Maths Centre.png' },
+          { name: 'CAE', logo: '/exam_centres/CAE.jpeg' },
+          { name: 'Bridge International', logo: '/exam_centres/Bridge International.png' },
         ],
       },
-      /**
-       * STUB — add one entry per centre. Logos go in public/centres/
-       * (transparent PNG or SVG, ~400px on the long edge); a null logo
-       * renders the dashed placeholder.
-       */
       centres: {
         title: 'Exam centres',
         items: [
-          { name: 'STUB — exam centre 1', logo: null },
-          { name: 'STUB — exam centre 2', logo: null },
-          { name: 'STUB — exam centre 3', logo: null },
-          { name: 'STUB — exam centre 4', logo: null },
-          { name: 'STUB — exam centre 5', logo: null },
-          { name: 'STUB — exam centre 6', logo: null },
-          { name: 'STUB — exam centre 7', logo: null },
-          { name: 'STUB — exam centre 8', logo: null },
+          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
+          { name: 'T&H Maths Centre', logo: '/exam_centres/T&H Maths Centre.png' },
+          { name: 'CAE', logo: '/exam_centres/CAE.jpeg' },
+          { name: 'Bridge International', logo: '/exam_centres/Bridge International.png' },
+          { name: 'Central International School', logo: '/exam_centres/Central International School.png' },
+          { name: 'Dorich Maths School', logo: '/exam_centres/Dorich Maths School.jpeg' },
+          { name: 'ENDLESS JOY (E.J) Maths Center', logo: '/exam_centres/ENDLESS JOY (E.J) Maths Center.jpg' },
+          { name: 'GREAT International School', logo: '/exam_centres/GREAT International School.jpg' },
+          { name: 'Htoo Chon Education Centre', logo: '/exam_centres/Htoo Chon Education Centre.JPG' },
+          { name: 'Hysan IQ Maths', logo: '/exam_centres/Hysan IQ Maths.jpeg' },
+          { name: 'KINGS International School', logo: '/exam_centres/KINGS International School.png' },
+          { name: 'MATHS For You Maths Centre', logo: '/exam_centres/MATHS For You Maths Centre.jpeg' },
+          { name: 'STARS OF THE FUTURE OLYMPIAD CENTRE', logo: '/exam_centres/STARS OF THE FUTURE OLYMPIAD CENTRE.JPG' },
+          { name: 'Thamardi Private High School Mawlamyine', logo: '/exam_centres/Thamardi Private High School Mawlamyine.jpg' },
+          { name: 'Thamardi Private High School Meiktila', logo: '/exam_centres/Thamardi Private High School Meiktila.jpg' },
+          { name: 'Tr.Mee International Maths & Olympiad Centre', logo: '/exam_centres/Tr.Mee International Maths & Olympiad Centre.jpeg' },
+          { name: 'UAT', logo: '/exam_centres/UAT.jpg' },
+          { name: 'YTO MATHS CENTRE', logo: '/exam_centres/YTO MATHS CENTRE.png' },
         ],
       },
       timeline: {
