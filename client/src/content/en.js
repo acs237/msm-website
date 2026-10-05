@@ -98,15 +98,6 @@ const committees = [
       body: [
         'MOMC is the astonishing proof-type national Maths Olympiad contest in Myanmar. MOMC (Myanmar Open Mathematics Competition) is the only gateway for the IMO. Divided by the age bracket, MOMC currently host 4 levels - Junior(I&II) and Seniors (I&II). Each level has 2 rounds: Round 1 is open to any student fallen in the relevant age bracket and Round 2 is explicitly for those who are chosen from the Round 1, and they are usually held in Late October and early January respectively.',
       ],
-      partners: {
-        title: 'Principal partners',
-        items: [
-          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
-          { name: 'T&H Maths Centre', logo: '/exam_centres/T&H Maths Centre.png' },
-          { name: 'CAE', logo: '/exam_centres/CAE.jpeg' },
-          { name: 'Bridge International', logo: '/exam_centres/Bridge International.png' },
-        ],
-      },
       centres: {
         title: 'Exam centres',
         items: [
@@ -150,6 +141,15 @@ const committees = [
       body: [
         'MOTC is the acronym of Mathematical Olympiad Training Committee. As the name suggests, we provide exclusive Math Olympiad training to young fellows before each MOMC Round 1 and Round 2. Our objective is to tighten the gap between MCQ Olympiads and Proof-based Olympiads especially for the Juniors.',
       ],
+      partners: {
+        title: 'Principal partners',
+        items: [
+          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
+          { name: 'T&H Maths Centre', logo: '/exam_centres/T&H Maths Centre.png' },
+          { name: 'CAE', logo: '/exam_centres/CAE.jpeg' },
+          { name: 'Bridge International', logo: '/exam_centres/Bridge International.png' },
+        ],
+      },
       studyGuide: {
         title: 'Olympiad Toolkit',
         lede:

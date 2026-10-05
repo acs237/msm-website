@@ -108,15 +108,6 @@ const committees = [
       body: [
         'MOMC သည် မြန်မာနိုင်ငံ၏ နိုင်ငံအဆင့် သင်္ချာအိုလံပစ်ပြိုင်ပွဲဖြစ်သည်။ MOMC (Myanmar Open Mathematics Competition) မှာ IMO တွင် မြန်မာကိုယ်စားပြု သွားရောက်ယှဉ်ပြိုင်ခွင့်ရရှိရေးအတွက် တစ်ခုတည်းသော အခွင့်အလမ်းဖြစ်ပြီး MOMC ကို အသက်အပိုင်းအခြားအရ Junior(I&II) and Seniors (I&II) ဟူ၍ အဆင့် (၄) မျိုးခွဲခြားထားရှိသည်။ အဆင့်တစ်ခုလျှင် Round (၂) ခုစီရှိရာ Round (၁) တွင် မည်သည့်ကျောင်းသားမဆို စာရင်းသွင်းဖြေဆိုနိုင်ပြီး  Round  (၂)သည် Round  (၁) မှ ရွေးချယ်ခံရသည့် ကျောင်းသားများသာ ဖြေဆိုခွင့်ရှိပါသည်။ ထိုပြိုင်ပွဲများကို (၁၀)လပိုင်းနှင့် နောက်နှစ် (၁)လပိုင်းဝန်းကျင်တွင် ကျင်းပလေ့ရှိသည်။',
       ],
-      partners: {
-        title: 'Principal partners',
-        items: [
-          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
-          { name: 'T&H Maths Centre', logo: '/exam_centres/T&H Maths Centre.png' },
-          { name: 'CAE', logo: '/exam_centres/CAE.jpeg' },
-          { name: 'Bridge International', logo: '/exam_centres/Bridge International.png' },
-        ],
-      },
       centres: {
         title: 'Exam centres',
         items: [
@@ -160,6 +151,15 @@ const committees = [
       body: [
         'MOTC မှာ မြန်မာနိုင်ငံအိုလံပစ်င်္သချာလေ့ကျင့်ရေးကော်မတီ ကို ဆိုလိုသည်။ MOTC သည် ကျောင်းသားများ၊ အထူးသဖြင့် အငယ်တန်းအဆင့်ပြိုင်ပွဲဝင်များ၊ ဓမ္မဒိဌာန်မေးခွန်းပုံစံမှ သင်္ချာနည်းကျ သက်သေပြချက်ရေးသားပြရသည့် မေးခွန်းပုံစံကို စတင်ထိတွေ့သောအခါ ကြုံတွေ့ရသည့် အခက်အခဲများ လျော့ပါးလာစေရန် ရည်ရွယ်ကာ MOMC Round (၁) နှင့် Round (၂) မတိုင်ခင်တွင် လေ့ကျင့်ရေးသင်ခန်းစာများ ပို့ချပေးသည်။',
       ],
+      partners: {
+        title: 'Principal partners',
+        items: [
+          { name: 'A4 International School', logo: '/exam_centres/A4 International School.jpg' },
+          { name: 'T&H Maths Centre', logo: '/exam_centres/T&H Maths Centre.png' },
+          { name: 'CAE', logo: '/exam_centres/CAE.jpeg' },
+          { name: 'Bridge International', logo: '/exam_centres/Bridge International.png' },
+        ],
+      },
       studyGuide: {
         title: 'Olympiad Toolkit',
         lede:

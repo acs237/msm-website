@@ -152,6 +152,25 @@ export default function CommitteePage({ slug }) {
         </Container>
       </section>
 
+      {/* Principal partners — only committees with `page.partners` show it. */}
+      {page.partners && (
+        <section className="border-b border-msm-line bg-white py-16 sm:py-24">
+          <Container>
+            <h2 className="display text-[clamp(2rem,5vw,3.5rem)] text-msm-ink">
+              {page.partners.title}
+            </h2>
+
+            <CentreGrid
+              items={page.partners.items}
+              stub={committeePage.centreLogoStub}
+              className="mt-10 grid-cols-2 lg:grid-cols-4"
+              logoClassName="h-28 sm:h-36"
+              nameClassName="text-xl lg:text-2xl"
+            />
+          </Container>
+        </section>
+      )}
+
       {/* Olympiad Toolkit — only committees with `page.studyGuide` show it. */}
       {page.studyGuide && (
         <section className="border-b border-msm-line bg-white py-16 sm:py-24">
@@ -314,24 +333,6 @@ export default function CommitteePage({ slug }) {
         </section>
       )}
 
-      {/* Principal partners — only committees with `page.partners` show it. */}
-      {page.partners && (
-        <section className="border-b border-msm-line bg-white py-16 sm:py-24">
-          <Container>
-            <h2 className="display text-[clamp(2rem,5vw,3.5rem)] text-msm-ink">
-              {page.partners.title}
-            </h2>
-
-            <CentreGrid
-              items={page.partners.items}
-              stub={committeePage.centreLogoStub}
-              className="mt-10 grid-cols-2 lg:grid-cols-4"
-              logoClassName="h-28 sm:h-36"
-            />
-          </Container>
-        </section>
-      )}
-
       {/* Exam centres — only committees with `page.centres` show it. */}
       {page.centres && (
         <section className="border-b border-msm-line bg-white py-16 sm:py-24">
@@ -405,7 +406,7 @@ export default function CommitteePage({ slug }) {
 }
 
 /** Logo tiles for exam centres. Inset rings rather than gap-px, so a ragged last row stays white. */
-function CentreGrid({ items, stub, className, logoClassName }) {
+function CentreGrid({ items, stub, className, logoClassName, nameClassName = 'text-sm' }) {
   if (items.length === 0) return null
 
   return (
@@ -429,7 +430,7 @@ function CentreGrid({ items, stub, className, logoClassName }) {
               </span>
             )}
           </div>
-          <p className="mt-4 font-cond text-sm leading-snug font-semibold text-msm-ink">
+          <p className={`mt-4 font-cond leading-snug font-semibold text-msm-ink ${nameClassName}`}>
             {centre.name}
           </p>
         </li>
