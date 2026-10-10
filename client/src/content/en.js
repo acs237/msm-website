@@ -114,7 +114,6 @@ const committees = [
           { name: 'Hysan IQ Maths', logo: '/exam_centres/Hysan IQ Maths.jpeg' },
           { name: 'KINGS International School', logo: '/exam_centres/KINGS International School.png' },
           { name: 'MATHS For You Maths Centre', logo: '/exam_centres/MATHS For You Maths Centre.jpeg' },
-          { name: 'STARS OF THE FUTURE OLYMPIAD CENTRE', logo: '/exam_centres/STARS OF THE FUTURE OLYMPIAD CENTRE.JPG' },
           { name: 'Thamardi Private High School Mawlamyine', logo: '/exam_centres/Thamardi Private High School Mawlamyine.jpg' },
           { name: 'Thamardi Private High School Meiktila', logo: '/exam_centres/Thamardi Private High School Meiktila.jpg' },
           { name: 'Tr.Mee International Maths & Olympiad Centre', logo: '/exam_centres/Tr.Mee International Maths & Olympiad Centre.jpeg' },
